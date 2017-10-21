@@ -64,20 +64,19 @@
                   <td style="width: 20%;">Status</td>
                   <td style="width: 1%;">:</td>
                   <td>
-                    @if($proposal->status == '2')
-                      <i class="fa fa-warning"></i>&nbsp;
-                    @endif
                     {{ proposal_status_display($proposal->status)}}&nbsp;
                     <a href="#" id="btn-change-status" data-id="{{ $proposal->id }}" data-text="{{ $proposal->code }}" class="btn btn-link">
                       <i class="fa fa-cog"></i>&nbsp;Change Status
                     </a>
-                    
+                    @if($proposal->status == '2')
+                    <p class="text-warning"><i class="fa fa-warning"></i>&nbsp;{{ $proposal->uncomplete_reason }}</p>
+                    @endif
                   </td>
                 </tr>
                 <tr>
                   <td style="width: 20%;">Status Notes</td>
                   <td style="width: 1%;">:</td>
-                  <td>{!! nl2br($proposal->status_notes) !!}</td>
+                  <td>{{ nl2br($proposal->status_notes) }}</td>
                 </tr>
               </table>
             </div>
@@ -180,13 +179,13 @@
               {{ Form::select('status',$status_opts , $proposal->status, ['class'=>'form-control', 'id'=>'status']) }}
             </div>
           </div>
-          <div class="form-group{{ $errors->has('status_notes') ? ' has-error' : '' }}">
-            {!! Form::label('status_notes', 'Status Notes', ['class'=>'col-sm-2 control-label']) !!}
+          <div class="form-group{{ $errors->has('uncomplete_reason') ? ' has-error' : '' }}" id="uncomplete_reason_group">
+            {!! Form::label('uncomplete_reason', 'Keterangan', ['class'=>'col-sm-2 control-label']) !!}
             <div class="col-sm-10">
-              {!! Form::textarea('status_notes',$proposal->status_notes,['class'=>'form-control', 'placeholder'=>'Status Notes of the proposal', 'id'=>'status_notes', 'required'=>true]) !!}
-              @if ($errors->has('status_notes'))
+              {!! Form::textarea('uncomplete_reason',$proposal->uncomplete_reason,['class'=>'form-control', 'placeholder'=>'uncomplete_reason of the proposal', 'id'=>'uncomplete_reason']) !!}
+              @if ($errors->has('uncomplete_reason'))
                 <span class="help-block">
-                  <strong>{{ $errors->first('status_notes') }}</strong>
+                  <strong>{{ $errors->first('uncomplete_reason') }}</strong>
                 </span>
               @endif
             </div>
@@ -218,8 +217,22 @@
   });
 
   $('#status').on('change', function(){
-    $('#status_notes').val('');
+    if($(this).val() == '2'){
+      $('#uncomplete_reason').prop('required', true);
+      $('#uncomplete_reason_group').show();
+    }else{
+      $('#uncomplete_reason').prop('required', false);
+      $('#uncomplete_reason_group').hide();
+    }
   });
+
+  @if($proposal->status == '2')
+    $('#uncomplete_reason').prop('required', true);
+    $('#uncomplete_reason_group').show();
+  @else
+    $('#uncomplete_reason').prop('required', false);
+    $('#uncomplete_reason_group').hide();
+  @endif
 
   //Block handle proposal file checking submission
   var proposal_status = {!! $proposal->status !!};

@@ -89,6 +89,17 @@
                   @endif
                 </div>
               </div>
+              <div class="form-group{{ $errors->has('jumlah_unit_kompetensi') ? ' has-error' : '' }}">
+                {!! Form::label('jumlah_unit_kompetensi', 'Jumlah Unit Kompetensi', ['class'=>'col-sm-2 control-label']) !!}
+                <div class="col-sm-10">
+                  {!! Form::number('jumlah_unit_kompetensi',null,['class'=>'form-control', 'placeholder'=>'Jumlah unit kompetensi of the proposal', 'id'=>'jumlah_unit_kompetensi']) !!}
+                  @if ($errors->has('jumlah_unit_kompetensi'))
+                    <span class="help-block">
+                      <strong>{{ $errors->first('jumlah_unit_kompetensi') }}</strong>
+                    </span>
+                  @endif
+                </div>
+              </div>
               <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
                 {!! Form::label('notes', 'Notes', ['class'=>'col-sm-2 control-label']) !!}
                 <div class="col-sm-10">

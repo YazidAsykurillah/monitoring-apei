@@ -36,6 +36,7 @@
                       <th style="width: 15%;">DPD</th>
                       <th>Member</th>
                       <th>Type</th>
+                      <th style="width:10%;">Jumlah Unit Kompetensi</th>
                       <th>Notes</th>
                       <th>Created Date</th>
                       <th style="width:10%;text-align:center;">Actions</th>
@@ -43,6 +44,7 @@
                   </thead>
                   <thead id="searchColumn">
                     <tr>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -59,6 +61,7 @@
                   </tbody>
                   <tfoot>
                     <tr>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -123,11 +126,12 @@
         { data: 'dpd', name: 'user.dpds.name' },
         { data: 'user', name: 'user.name' },
         { data: 'type', name: 'type' },
+        { data: 'jumlah_unit_kompetensi', name: 'jumlah_unit_kompetensi' },
         { data: 'notes', name: 'notes' },
         { data: 'created_at', name: 'created_at' },
         { data: 'actions', name: 'actions', orderable:false, searchable:false, className:'dt-body-center' }
       ],
-      "order": [[ 6, "desc" ]]
+      "order": [[ 7, "desc" ]]
     });
 
     // Delete button handler
@@ -141,7 +145,7 @@
 
     // Setup - add a text input to each header cell
     $('#searchColumn th').each(function() {
-      if ($(this).index() != 0 && $(this).index() != 7) {
+      if ($(this).index() != 0 && $(this).index() != 8) {
         $(this).html('<input class="form-control" type="text" placeholder="Search" data-id="' + $(this).index() + '" />');
       }
           

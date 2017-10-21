@@ -4,6 +4,10 @@
   Member
 @endsection
 
+@section('additional_styles')
+  {!! Html::style('css/datepicker/datepicker3.css') !!}
+@endsection
+
 @section('page_header')
   <h1>
     Member
@@ -93,6 +97,28 @@
                 @endif
               </div>
             </div>
+            <div class="form-group{{ $errors->has('tempat_lahir') ? ' has-error' : '' }}">
+              {!! Form::label('tempat_lahir', 'Tempat Lahir', ['class'=>'col-sm-2 control-label']) !!}
+              <div class="col-sm-10">
+                {!! Form::text('tempat_lahir',null,['class'=>'form-control', 'placeholder'=>'Place of birth', 'id'=>'tempat_lahir']) !!}
+                @if ($errors->has('tempat_lahir'))
+                  <span class="help-block">
+                    <strong>{{ $errors->first('tempat_lahir') }}</strong>
+                  </span>
+                @endif
+              </div>
+            </div>
+            <div class="form-group{{ $errors->has('tanggal_lahir') ? ' has-error' : '' }}">
+              {!! Form::label('tanggal_lahir', 'Tanggal Lahir', ['class'=>'col-sm-2 control-label']) !!}
+              <div class="col-sm-10">
+                {!! Form::text('tanggal_lahir',null,['class'=>'form-control', 'placeholder'=>'Date of birth', 'id'=>'tanggal_lahir']) !!}
+                @if ($errors->has('tanggal_lahir'))
+                  <span class="help-block">
+                    <strong>{{ $errors->first('tanggal_lahir') }}</strong>
+                  </span>
+                @endif
+              </div>
+            </div>
             <div class="form-group">
               {!! Form::label('', '', ['class'=>'col-sm-2 control-label']) !!}
               <div class="col-sm-10">
@@ -114,7 +140,7 @@
 @endsection
 
 @section('additional_scripts')
- 
+ {!! Html::script('js/datepicker/bootstrap-datepicker.js') !!}
  <script type="text/javascript">
     //Block dpd_id selection
     $('#dpd_id').select2({
@@ -138,6 +164,15 @@
       allowClear : true
     });
     //ENDBlock dpd_id selection
+
+    //Block Tanggal Lahir
+    $('#tanggal_lahir').on('keydown', function(event){
+      event.preventDefault();
+    });
+    $('#tanggal_lahir').datepicker({
+      format : 'yyyy-mm-dd',
+    });
+    //ENDBlock Tanggal Lahir
   </script>
   
    

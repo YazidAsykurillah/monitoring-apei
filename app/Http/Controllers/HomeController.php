@@ -40,7 +40,7 @@ class HomeController extends Controller
             $scanning_dan_tanda_terima = Proposal::where('status', '=', '7')->get()->count();
             $sertifikat_siap_kirim = Proposal::where('status', '=', '8')->get()->count();
             $sertifikat_sudah_terkirim = Proposal::where('status', '=', '9')->get()->count();
-            $on_process_certificates  = Proposal::whereNotIn('status', ['0','1', '2', '9'])->get()->count();
+            $on_process_certificates  = Proposal::whereNotIn('status', ['0','1', '2', '10'])->get()->count();
             return view('home')
                 ->with('complete_proposal_files', $complete_proposal_files)
                 ->with('uncomplete_proposal_files', $uncomplete_proposal_files)

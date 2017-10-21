@@ -8,7 +8,12 @@ class Proposal extends Model
 {
     protected $table = 'proposals';
 
-    protected $fillable = ['code', 'user_id', 'type', 'surat_permohonan', 'ktp', 'foto_3x4', 'ijazah', 'fotokopi_sk_a_t', 'surat_pernyataan', 'cv', 'status', 'notes', 'uncomplete_reason', 'received_date'];
+    protected $fillable = [
+        'code', 'user_id', 'type', 'surat_permohonan', 
+        'ktp', 'foto_3x4', 'ijazah', 'fotokopi_sk_a_t', 'surat_pernyataan', 
+        'cv', 'status', 'notes', 'uncomplete_reason', 'received_date',
+        'jumlah_unit_kompetensi', 'status_notes'
+    ];
 
     public function user()
     {

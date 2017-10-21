@@ -81,6 +81,8 @@ class UserController extends Controller
         $user->password = bcrypt("manchesterunited");
         $user->id_card = $request->id_card;
         $user->telephone = $request->telephone;
+        $user->tempat_lahir = $request->tempat_lahir;
+        $user->tanggal_lahir = $request->tanggal_lahir;
         $user->save();
         $user_id = $user->id;
         //attach role for this user
@@ -196,6 +198,8 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->id_card = $request->id_card;
         $user->telephone = $request->telephone;
+        $user->tempat_lahir = $request->tempat_lahir ? $request->tempat_lahir : NULL;
+        $user->tanggal_lahir = $request->tanggal_lahir ? $request->tanggal_lahir : NULL;
         $user->save();
         if($request->role_id == 2){ //update user with role of Administrator DPP
             return redirect('user-dpp')

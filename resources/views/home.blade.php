@@ -63,7 +63,7 @@
                     <tr>
                       <th>Code</th>
                       <th>Member</th>
-                      <th>Identity</th>
+                      <th>NO KTP / Passport</th>
                       <th>Created Date</th>
                       <th>Status</th>
                     </tr>
@@ -77,7 +77,7 @@
                         </a>
                       </td>
                       <td>{{ $proposal->user->name }}</td>
-                      <td>{{ $proposal->user->ktp }}</td>
+                      <td>{{ $proposal->user->id_card }}</td>
                       <td>{{ $proposal->created_at }}</td>
                       <td>{{ proposal_status_display($proposal->status) }}</td>
                     </tr>

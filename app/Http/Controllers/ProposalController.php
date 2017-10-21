@@ -77,6 +77,7 @@ class ProposalController extends Controller
         $proposal = new Proposal;
         $proposal->user_id = $request->user_id;
         $proposal->type = $request->type;
+        $proposal->jumlah_unit_kompetensi = abs($request->jumlah_unit_kompetensi);
         $proposal->notes = $request->notes;
         $proposal->save();
         $proposal_id = $proposal->id;
@@ -116,15 +117,16 @@ class ProposalController extends Controller
         $proposal = Proposal::findOrFail($id);
         $status_opts = [
             '0'=>'Pengajuan diterima',
-            '1'=>'Berkas Lengkap',
             '2'=>'Berkas Tidak Lengkap',
+            '1'=>'Berkas Lengkap',
             '3'=>'Proses Online DJK',
             '4'=>'Terima Nomer Registrasi',
             '5'=>'Cetak Sertifikat',
             '6'=>'Penandatangan sertifikat',
             '7'=>'Scanning dan tanda terima',
             '8'=>'Sertifikat siap kirim',
-            '9'=>'Sertifikat sudah terkirim'
+            '9'=>'Sertifikat sudah terkirim',
+            '10'=>'SELESAI'
         ];
 
         $proposal_files = \DB::table('proposal_files')->where('proposal_id', '=', $id)->get();
@@ -196,6 +198,7 @@ class ProposalController extends Controller
         $proposal = Proposal::findOrFail($id);
         $proposal->user_id = $request->user_id;
         $proposal->type = $request->type;
+        $proposal->jumlah_unit_kompetensi = abs($request->jumlah_unit_kompetensi);
         $proposal->notes = $request->notes;
         $proposal->save();
         return redirect('proposal/'.$id)
@@ -225,9 +228,7 @@ class ProposalController extends Controller
         $old_status = $proposal->status;
 
         $proposal->status = $request->status;
-        if($request->status == '2'){
-            $proposal->uncomplete_reason = $request->uncomplete_reason;
-        }
+        $proposal->status_notes = $request->status_notes;
         $proposal->save();
 
             //Block save log
@@ -265,11 +266,11 @@ class ProposalController extends Controller
       $count_proposal_configuration = $this->count_proposal_configuration($proposal);
       if(count($true_files) == $count_proposal_configuration){
         //update proposal status to "berkas_lengkap";
-        \DB::table('proposals')->where('id', $proposal->id)->update(['status'=>'1']);
+        \DB::table('proposals')->where('id', $proposal->id)->update(['status'=>'1', 'status_notes'=>'Berkas Lengkap']);
       }
       else{
         //update proposal status to "berkas_TIDAKlengkap";
-        \DB::table('proposals')->where('id', $proposal->id)->update(['status'=>'2']); 
+        \DB::table('proposals')->where('id', $proposal->id)->update(['status'=>'2', 'status_notes'=>'Berkas Tidak Lengkap']); 
       }
 
       return redirect('proposal/'.$proposal->id)

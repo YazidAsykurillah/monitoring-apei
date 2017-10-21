@@ -25,7 +25,7 @@ class CreateProposalsTable extends Migration
             $table->string('surat_pernyataan')->nullable();
             $table->string('cv')->nullable();
             $table->enum('status',[
-                '0','1','2','3','4','5','6','7','8','9'
+                '0','1','2','3','4','5','6','7','8','9', '10'
             ])->default('0');
             $table->text('notes');
             $table->timestamps();

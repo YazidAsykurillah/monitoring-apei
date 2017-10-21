@@ -217,11 +217,13 @@ class DatatablesController extends Controller
     public function getProposals(Request $request)
     {
 
+        
         \DB::statement(\DB::raw('set @rownum=0'));
         $logged_in_user = \Auth::user()->roles->first()->code;
 
         //Super Admin or Administrator DPP
         if($logged_in_user == 'SUP' || $logged_in_user == 'AD-DPP'){
+            
             $proposals = Proposal::with(['user', 'user.dpds'])
             ->select([
                 \DB::raw('@rownum  := @rownum  + 1 AS rownum'),
@@ -274,8 +276,24 @@ class DatatablesController extends Controller
             ->editColumn('type', function($proposals){
                 return proposal_type_display($proposals->type);
             })
+            ->editColumn('notes', function($proposals){
+                if(strlen($proposals->notes) > 100){
+                    return nl2br(substr($proposals->notes, 0, 100))." ... (<small><i>Click the detail icon for more information</i></small>)";
+                }
+                else{
+                    return nl2br($proposals->notes);
+                }
+            })
             ->editColumn('status', function($proposals){
                 return proposal_status_display($proposals->status);
+            })
+            ->editColumn('status_notes', function($proposals){
+                if(strlen($proposals->status_notes) > 100){
+                    return nl2br(substr($proposals->status_notes, 0, 100))." ... (<small><i>Click the detail icon for more information</i></small>)";
+                }
+                else{
+                    return nl2br($proposals->status_notes);
+                }
             })
             ->addColumn('actions', function($proposals){
                     $actions_html ='<a href="'.url('proposal/'.$proposals->id.'').'" class="btn btn-primary btn-xs" title="Click to view the detail">';
@@ -294,10 +312,16 @@ class DatatablesController extends Controller
                     
                     return $actions_html;
             });
-
+        
+        if($request->get('columns')[8]['search']['value'] != ""){
+            $data_proposals->filter(function($query) use ($request){
+                $query->where('proposals.status', '=',$request->get('columns')[8]['search']['value']);
+            });
+        }
         if ($keyword = $request->get('search')['value']) {
             $data_proposals->filterColumn('rownum', 'whereRaw', '@rownum  + 1 like ?', ["%{$keyword}%"]);
         }
+
 
         return $data_proposals->make(true);
     }
@@ -605,7 +629,7 @@ class DatatablesController extends Controller
                 \DB::raw('@rownum  := @rownum  + 1 AS rownum'),
                 'proposals.*'
             ])
-            ->whereNotIn('status',['0','1', '2', '9']);
+            ->whereNotIn('status',['0','1', '2', '10']);
         
         //if logged in user is Administrator DPD, displsay only related proposal based on dpd_id
         if($logged_in_user->roles->first()->code == 'AD-DPD'){
@@ -618,7 +642,7 @@ class DatatablesController extends Controller
             ])->whereHas('user.dpds', function($query) use($dpd_id){
                 return $query->where('id', '=', $dpd_id);
             })
-            ->whereNotIn('status',['0','1', '2', '9']);
+            ->whereNotIn('status',['0','1', '2', '10']);
         }
         
         $data_proposals = Datatables::of($proposals)

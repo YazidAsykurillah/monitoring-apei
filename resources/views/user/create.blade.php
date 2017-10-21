@@ -4,6 +4,10 @@
   Create Member
 @endsection
 
+@section('additional_styles')
+  {!! Html::style('css/datepicker/datepicker3.css') !!}
+@endsection
+
 @section('page_header')
   <h1>
     Member
@@ -60,7 +64,7 @@
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
               {!! Form::label('email', 'Email', ['class'=>'col-sm-2 control-label']) !!}
               <div class="col-sm-10">
-                {!! Form::text('email',null,['class'=>'form-control', 'placeholder'=>'email of the member', 'id'=>'email']) !!}
+                {!! Form::text('email',null,['class'=>'form-control', 'placeholder'=>'Email of the member', 'id'=>'email']) !!}
                 @if ($errors->has('email'))
                   <span class="help-block">
                     <strong>{{ $errors->first('email') }}</strong>
@@ -71,7 +75,7 @@
             <div class="form-group{{ $errors->has('id_card') ? ' has-error' : '' }}">
               {!! Form::label('id_card', 'KTP/Passport', ['class'=>'col-sm-2 control-label']) !!}
               <div class="col-sm-10">
-                {!! Form::text('id_card',null,['class'=>'form-control', 'placeholder'=>'id_card of the member', 'id'=>'id_card']) !!}
+                {!! Form::text('id_card',null,['class'=>'form-control', 'placeholder'=>'ID Card of the member', 'id'=>'id_card']) !!}
                 @if ($errors->has('id_card'))
                   <span class="help-block">
                     <strong>{{ $errors->first('id_card') }}</strong>
@@ -86,6 +90,28 @@
                 @if ($errors->has('telephone'))
                   <span class="help-block">
                     <strong>{{ $errors->first('telephone') }}</strong>
+                  </span>
+                @endif
+              </div>
+            </div>
+            <div class="form-group{{ $errors->has('tempat_lahir') ? ' has-error' : '' }}">
+              {!! Form::label('tempat_lahir', 'Tempat Lahir', ['class'=>'col-sm-2 control-label']) !!}
+              <div class="col-sm-10">
+                {!! Form::text('tempat_lahir',null,['class'=>'form-control', 'placeholder'=>'Place of birth', 'id'=>'tempat_lahir']) !!}
+                @if ($errors->has('tempat_lahir'))
+                  <span class="help-block">
+                    <strong>{{ $errors->first('tempat_lahir') }}</strong>
+                  </span>
+                @endif
+              </div>
+            </div>
+            <div class="form-group{{ $errors->has('tanggal_lahir') ? ' has-error' : '' }}">
+              {!! Form::label('tanggal_lahir', 'Tanggal Lahir', ['class'=>'col-sm-2 control-label']) !!}
+              <div class="col-sm-10">
+                {!! Form::text('tanggal_lahir',null,['class'=>'form-control', 'placeholder'=>'Date of birth', 'id'=>'tanggal_lahir']) !!}
+                @if ($errors->has('tanggal_lahir'))
+                  <span class="help-block">
+                    <strong>{{ $errors->first('tanggal_lahir') }}</strong>
                   </span>
                 @endif
               </div>
@@ -111,7 +137,8 @@
 @endsection
 
 @section('additional_scripts')
- <script type="text/javascript">
+  {!! Html::script('js/datepicker/bootstrap-datepicker.js') !!}
+  <script type="text/javascript">
     //Block dpd_id selection
     $('#dpd_id').select2({
       placeholder: 'Select DPD',
@@ -134,6 +161,15 @@
       allowClear : true
     });
     //ENDBlock dpd_id selection
+
+    //Block Tanggal Lahir
+    $('#tanggal_lahir').on('keydown', function(event){
+      event.preventDefault();
+    });
+    $('#tanggal_lahir').datepicker({
+      format : 'yyyy-mm-dd',
+    });
+    //ENDBlock Tanggal Lahir
   </script>
   
    

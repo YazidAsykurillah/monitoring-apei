@@ -28,6 +28,7 @@ class StoreProposalRequest extends Request
             'user_id'=>'required|exists:users,id',
             'notes'=>'required',
             'type'=>'required',
+            'jumlah_unit_kompetensi'=>'required|integer',
         ];
     }
 }

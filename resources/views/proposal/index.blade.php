@@ -36,17 +36,21 @@
                     <tr>
                       <th style="width:5%;">#</th>
                       <th style="width: 10%;">Code</th>
-                      <th style="width: 15%;">DPD</th>
+                      <th style="width: 10%;">DPD</th>
                       <th>Member</th>
                       <th>Type</th>
-                      <th>Notes</th>
-                      <th>Created Date</th>
+                      <th style="width:10%;">Jumlah Unit Kompetensi</th>
+                      <th style="width:10%;">Notes</th>
+                      <th style="width:10%;">Created Date</th>
                       <th>Status</th>
+                      <th>Status Notes</th>
                       <th style="width:10%;text-align:center;">Actions</th>
                     </tr>
                   </thead>
                   <thead id="searchColumn">
                     <tr>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -64,6 +68,8 @@
                   </tbody>
                   <tfoot>
                     <tr>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -129,12 +135,14 @@
         { data: 'dpd', name: 'user.dpds.name' },
         { data: 'user', name: 'user.name' },
         { data: 'type', name: 'type' },
+        { data: 'jumlah_unit_kompetensi', name: 'jumlah_unit_kompetensi', className:'dt-body-right' },
         { data: 'notes', name: 'notes' },
         { data: 'created_at', name: 'created_at' },
         { data: 'status', name: 'status' },
+        { data: 'status_notes', name: 'status_notes' },
         { data: 'actions', name: 'actions', orderable:false, searchable:false, className:'dt-body-center' }
       ],
-      "order": [[ 6, "desc" ]]
+      "order": [[ 7, "desc" ]]
     });
 
     // Delete button handler
@@ -148,10 +156,10 @@
 
     // Setup text inputs and select options to each header cell
     $('#searchColumn th').each(function() {
-      if ($(this).index() != 0 && $(this).index() != 8) {
+      if ($(this).index() != 0 && $(this).index() != 10) {
         $(this).html('<input class="form-control" type="text" placeholder="Search" data-id="' + $(this).index() + '" />');
       }
-      if($(this).index() == 7){
+      if($(this).index() == 8){
         $(this).html(
           '<select class="form-control" name="status" data-id="'+$(this).index()+'">'+
             '<option value="">All</option>'+
@@ -165,6 +173,7 @@
             '<option value="7">Scanning dan tandaterima</option>'+
             '<option value="8">Sertifikat siap kirim</option>'+
             '<option value="9">Sertifikat sudah terkirim</option>'+
+            '<option value="10">SELESAI</option>'+
           '</select>'
         );
       }

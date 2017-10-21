@@ -76,12 +76,23 @@
               <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
                 {!! Form::label('type', 'Type', ['class'=>'col-sm-2 control-label']) !!}
                 <div class="col-sm-10">
-                  <p>{!! Form::radio('type', 'equalization') !!} Penyetaraan</p>
                   <p>{!! Form::radio('type', 'new') !!} Pengajuan Baru</p>
+                  <p>{!! Form::radio('type', 'equalization') !!} Penyetaraan</p>
                   <p>{!! Form::radio('type', 'extension') !!} Perpanjangan</p>
                   @if ($errors->has('type'))
                     <span class="help-block">
                       <strong>{{ $errors->first('type') }}</strong>
+                    </span>
+                  @endif
+                </div>
+              </div>
+              <div class="form-group{{ $errors->has('jumlah_unit_kompetensi') ? ' has-error' : '' }}">
+                {!! Form::label('jumlah_unit_kompetensi', 'Jumlah Unit Kompetensi', ['class'=>'col-sm-2 control-label']) !!}
+                <div class="col-sm-10">
+                  {!! Form::number('jumlah_unit_kompetensi',null,['class'=>'form-control', 'placeholder'=>'Jumlah unit kompetensi of the proposal', 'id'=>'jumlah_unit_kompetensi']) !!}
+                  @if ($errors->has('jumlah_unit_kompetensi'))
+                    <span class="help-block">
+                      <strong>{{ $errors->first('jumlah_unit_kompetensi') }}</strong>
                     </span>
                   @endif
                 </div>

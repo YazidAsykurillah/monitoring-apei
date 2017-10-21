@@ -65,6 +65,16 @@
                   <td style="width: 1%;">:</td>
                   <td>{{ $user->telephone }}</td>
                 </tr>
+                <tr>
+                  <td style="width: 20%;">Tempat Lahir</td>
+                  <td style="width: 1%;">:</td>
+                  <td>{{ $user->tempat_lahir }}</td>
+                </tr>
+                <tr>
+                  <td style="width: 20%;">Tanggal Lahir</td>
+                  <td style="width: 1%;">:</td>
+                  <td>{{ $user->tanggal_lahir }}</td>
+                </tr>
               </table>
           </div>
         </div><!-- /.box-body -->
