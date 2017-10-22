@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
 @section('page_title')
-  Daftar Member
+  Daftar Pemohon
 @endsection
 
 @section('page_header')
   <h1>
-    Member
-    <small>Daftar Member</small>
+    Pemohon
+    <small>Daftar Pemohon</small>
   </h1>
 @endsection
 
 @section('breadcrumb')
   <ol class="breadcrumb">
     <li><a href="{{ URL::to('home') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li><a href="{{ URL::to('member') }}"><i class="fa fa-user"></i> Member</a></li>
+    <li><a href="{{ URL::to('member') }}"><i class="fa fa-user"></i> Pemohon</a></li>
     <li class="active"><i></i> Index</li>
   </ol>
 @endsection
@@ -24,8 +24,13 @@
     <div class="col-lg-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Member</h3>
-              <a href="{{ url('member/create') }}" class="btn btn-primary pull-right">Add New</a>
+              <h3 class="box-title">Pemohon</h3>
+              <div class="pull-right">
+                <a href="{{ url('member/create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>
+                <a href="{{ url('member/import') }}" class="btn btn-default"><i class="fa fa-upload"></i> Import</a>
+              </div>
+              
+              
             </div><!-- /.box-header -->
             <div class="box-body">
               <div class="table-responsive">
@@ -33,7 +38,7 @@
                   <thead>
                     <tr>
                       <th style="width:5%;">#</th>
-                      <th>DPD</th>
+                      <th>PD</th>
                       <th>Name</th>
                       <th>Email</th>
                       <th>KTP / Passport</th>

@@ -128,6 +128,14 @@
       </li>
       @endif
 
+      
+      <li {{{ (Request::is('template*') ? 'class=active' : '') }}}>
+        <a href="{{ URL::to('template') }}">
+          <i class="fa fa-download"></i> <span>Template</span>
+        </a>
+      </li>
+      
+
     </ul><!-- /.sidebar-menu -->
   </section>
   <!-- /.sidebar -->

@@ -38,6 +38,8 @@ Route::post('deleteUser', 'UserController@destroy');
 	//ENDBlock Administrator DPD
 
 	//Block Member
+	Route::post('member/import', 'UserController@postImport');
+	Route::get('member/import', 'UserController@getImport');
 	Route::get('member/{id}/edit', 'UserController@edit');
 	Route::get('member/create','UserController@create');
 	Route::get('member/{id}', 'UserController@show');
@@ -105,3 +107,7 @@ Route::get('select2UserFromCreateProposal', 'Select2Controller@select2UserFromCr
 
 Route::get('select2Dpd', 'Select2Controller@select2Dpd');
 Route::get('select2DpdFromCreateProposal', 'Select2Controller@select2DpdFromCreateProposal');
+
+Route::get('template/proposal', 'TemplateController@proposal');
+Route::get('template/member', 'TemplateController@member');
+Route::resource('template', 'TemplateController');

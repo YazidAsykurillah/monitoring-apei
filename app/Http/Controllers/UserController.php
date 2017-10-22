@@ -11,6 +11,7 @@ use App\Http\Requests\UploadPhotoRequest;
 use App\Http\Requests\ChangePasswordRequest;
 
 use App\User;
+use Excel;
 
 class UserController extends Controller
 {
@@ -331,4 +332,71 @@ class UserController extends Controller
        }
     }
 
+
+    //import excel
+    public function getImport()
+    {
+        return view('user.import');
+    }
+
+    public function postImport(Request $request)
+    {
+        $imported_data = 0;
+        if($request->hasFile('file') && $request->dpd_id!=""){
+            $path = $request->file('file')->getRealPath();
+            $data = Excel::load($path, function($reader) {
+            })->get();
+            if(!empty($data) && $data->count()){
+                foreach ($data as $key => $value) {
+                    $check_for_member_duplication = $this->check_for_member_duplication($value->id_card, $value->email);
+                    if($check_for_member_duplication == FALSE){
+                        $user = new User;
+                        $user->name = $value->name;
+                        $user->email = $value->email;
+                        $user->password = bcrypt("manchesterunited");
+                        $user->id_card = $value->id_card;
+                        $user->telephone = $value->telephone;
+                        $user->tempat_lahir = $value->tempat_lahir;
+                        $user->tanggal_lahir = $value->tanggal_lahir;
+                        $user->save();
+                        $user_id = $user->id;
+                        //attach role for this user
+                        $saved_user = User::find($user_id);
+                        $saved_user->roles()->attach(4);
+                        //attach dpd for this user
+                        $saved_user->dpds()->attach($request->dpd_id);
+                        $imported_data +=1;   
+                    }
+                    
+                }
+
+                
+            }
+            return back()->with('successMessage', "$imported_data has been imported");
+            
+        }
+        else{
+            return redirect()->back()
+            ->withInput()
+            ->with('errorMessage', "Please select the DPD and upload the file");
+        }
+    }
+
+    protected function check_for_member_duplication($id_card = NULL, $email = NULL)
+    {
+        if($id_card != NULL)
+        {
+            $user = User::where('id_card', '=', $id_card)->orWhere('email', '=', $email)->get();
+
+            if($user ->count()){
+                return TRUE;
+            }
+            else{
+                return FALSE;
+            }
+        }else{
+            return TRUE;    
+        }
+        
+    }
 }
