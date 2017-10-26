@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
 @section('page_title')
-  Proposal
+  Permohonan
 @endsection
 
 @section('page_header')
   <h1>
-    Proposal
-    <small>Daftar Proposal</small>
+    Permohonan
+    <small>Daftar Permohonan</small>
   </h1>
 @endsection
 
 @section('breadcrumb')
   <ol class="breadcrumb">
     <li><a href="{{ URL::to('home') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li><a href="{{ URL::to('proposal') }}"><i class="fa fa-newspaper-o"></i> Proposal</a></li>
+    <li><a href="{{ URL::to('proposal') }}"><i class="fa fa-newspaper-o"></i> Permohonan</a></li>
     <li class="active"><i></i> Index</li>
   </ol>
 @endsection
@@ -24,10 +24,14 @@
     <div class="col-lg-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Daftar Proposal</h3>
-              @if(\Auth::user()->can('create-proposal'))
-              <a href="{{ url('proposal/create') }}" class="btn btn-primary pull-right">Add New</a>
-              @endif
+              <h3 class="box-title">Daftar Permohonan</h3>
+              <div class="pull-right">
+                @if(\Auth::user()->can('create-proposal'))
+                <a href="{{ url('proposal/create') }}" class="btn btn-primary">Add New</a>
+                @endif
+                <a href="{{ url('proposal/import') }}" class="btn btn-default" title="Clik to import proposal"><i class="fa fa-upload"></i> Import</a>
+              </div>
+              
             </div><!-- /.box-header -->
             <div class="box-body">
               <div class="table-responsive">

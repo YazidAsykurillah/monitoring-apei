@@ -114,7 +114,7 @@
                   <a href="{{ url('proposal') }}" class="btn btn-default">
                     <i class="fa fa-repeat"></i>&nbsp;Cancel
                   </a>&nbsp;
-                  <button type="submit" class="btn btn-info" id="btn-submit-certificate">
+                  <button type="submit" class="btn btn-info" id="btn-submit-proposal">
                     <i class="fa fa-save"></i>&nbsp;Save
                   </button>
                 </div>
@@ -203,7 +203,13 @@
     allowClear : true
   });
   //ENDBlock user_id selection
-   
+  
+  //Block form proposal submision
+  $('#form-create-proposal').on('submit', function(){
+    $('#btn-submit-proposal').prop('disabled', true);
+  });
+  //ENDBlock form proposal submision
+
 </script>
   
    

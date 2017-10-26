@@ -8,11 +8,14 @@ use App\Http\Requests;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
 use App\Http\Requests\UploadFileRequest;
+use App\Http\Requests\ImportProposalRequest;
 
 use App\User;
 use App\Proposal;
 use App\ProposalLog;
 
+use Excel;
+use Carbon\Carbon;
 class ProposalController extends Controller
 {
     /**
@@ -62,8 +65,6 @@ class ProposalController extends Controller
     {
 
       return view('proposal.create');
-      
-
     }
 
     /**
@@ -229,6 +230,12 @@ class ProposalController extends Controller
 
         $proposal->status = $request->status;
         $proposal->status_notes = $request->status_notes;
+          //if request status is 2 = Berkas tidak lengkap, delete proposal file related to this proposal
+          if($request->status == 2){
+              \DB::table('proposal_files')->where('proposal_id', '=', $proposal->id)->delete();
+          }
+
+        //update the proposal
         $proposal->save();
 
             //Block save log
@@ -239,6 +246,10 @@ class ProposalController extends Controller
             $log->description = "From <strong>".proposal_status_display($old_status)."</strong> to <strong>".proposal_status_display($request->status)."</strong>";
             $log->save();
             //ENDBlock save log
+
+
+          
+
 
         return redirect('proposal/'.$request->proposal_id)
             ->with('successMessage', "Proposal status has been changed");
@@ -311,7 +322,109 @@ class ProposalController extends Controller
     }
 
 
+    //import excel
+    public function getImport()
+    {
+        return view('proposal.import');
+    }
 
+
+    public function postImport(ImportProposalRequest $request)
+    {
+      $path = $request->file('file')->getRealPath();
+      $data = Excel::load($path, function($reader) {
+      })->get();
+      if(!empty($data) && $data->count()){
+        //initiate new imported member
+        $new_imported_member = 0;
+        $imported_proposal = 0;
+        foreach ($data as $key => $value) {
+          //check if member is already registered based on id_card or email value
+          $is_member_registered = $this->is_member_registered($value->id_card, $value->email);
+
+
+          if($is_member_registered == FALSE){
+            //create the user account to this member and also store the proposal too
+            //create the user account
+              $user = new User;
+              $user->name = $value->name;
+              $user->id_card = $value->id_card;
+              $user->email = $value->email;
+              $user->tempat_lahir = $value->tempat_lahir;
+              $user->tanggal_lahir = Carbon::parse($value->tanggal_lahir)->format('Y-m-d');
+              $user->telephone = $value->telephone;
+              $user->password = bcrypt("manchesterunited");
+              $user->save();
+              $user_id = $user->id;
+              //attach role for this user
+              $saved_user = User::find($user_id);
+              $saved_user->roles()->attach(4);
+              //attach dpd for this user
+              $saved_user->dpds()->attach($request->dpd_id);
+              $new_imported_member +=1;
+            //store the proposal
+              $proposal = new Proposal;
+              $proposal->user_id = $user_id;
+              $proposal->type = $request->type;
+              $proposal->jumlah_unit_kompetensi = abs($value->jumlah_unit_kompetensi);
+              $proposal->save();
+              $proposal_id = $proposal->id;
+              //update proposal_code;
+              $update_proposal_code = $this->update_proposal_code($proposal_id);
+              //register proposal log
+              $log = $this->register_proposal_create_mode($proposal_id);
+              //increment the imported proposal
+              $imported_proposal +=1;
+              
+              
+          }
+          else{
+            //only store the proposal for the returned user 
+            //define the user returned data from is_member_registered
+            $user = $is_member_registered->first();
+            
+            $proposal = new Proposal;
+            $proposal->user_id = $user->id;
+            $proposal->type = $request->type;
+            $proposal->jumlah_unit_kompetensi = abs($value->jumlah_unit_kompetensi);
+            $proposal->save();
+            $proposal_id = $proposal->id;
+            //update proposal_code;
+            $update_proposal_code = $this->update_proposal_code($proposal_id);
+            //register proposal log
+            $log = $this->register_proposal_create_mode($proposal_id);
+            //increment the imported proposal
+            $imported_proposal +=1;
+            
+            
+
+          }
+
+        }
+
+        return redirect('proposal')
+               ->with('successMessage', "Imported $imported_proposal proposal and registered $new_imported_member member");
+          
+      }
+      
+    }
+
+
+    protected function is_member_registered( $id_card = NULL, $email = NULL )
+    {
+      if($id_card != NULL || $email!= NULL){
+        $user = User::where('id_card', '=', $id_card)->orWhere('email', '=', $email)->get();
+
+        if($user ->count()){
+          return $user;
+        }
+        else{
+          return FALSE;
+        }
+      }else{
+        return "Missing ID Card param or email";
+      }
+    }
    
 
 }

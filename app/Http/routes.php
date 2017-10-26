@@ -51,6 +51,8 @@ Route::post('user/uploadphoto', 'UserController@uploadphoto');
 Route::resource('user', 'UserController');
 
 //Proposal
+Route::post('proposal/import', 'ProposalController@postImport');
+Route::get('proposal/import', 'ProposalController@getImport');
 Route::post('proposal/fileCompletion', 'ProposalController@fileCompletion');
 Route::post('deleteProposal', 'ProposalController@destroy');
 Route::post('proposal/deletefile','ProposalController@deletefile');
