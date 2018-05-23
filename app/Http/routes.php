@@ -91,17 +91,21 @@ Route::controller('datatables', 'DatatablesController',[
 	'getUserDpps'=>'datatables.getUserDpps',
 	'getUserDpds'=>'datatables.getUserDpds',
 	'getMembers'=>'datatables.getMembers',
+	'getMembersOfDpd'=>'datatables.getMembersOfDpd',
 	'getProposals'=>'datatables.getProposals',
 	'getProposals_1'=>'datatables.getProposals_1',
 	'getProposals_2'=>'datatables.getProposals_2',
 	'getProposals_3'=>'datatables.getProposals_3',
 	'getProposals_9'=>'datatables.getProposals_9',
 	'getProposals_on_process'=>'datatables.getProposals_on_process',
+	'getProposalRekapitulasi'=>'datatables.getProposalRekapitulasi',
 	'getRoles'=>'datatables.getRoles',
 	'getPermissions'=>'datatables.getPermissions',
 ]);
 
-
+//Profile
+Route::post('profile/change-password', 'ProfileController@changePassword');
+Route::resource('profile', 'ProfileController');
 
 //Select2
 Route::get('select2User', 'Select2Controller@select2User');

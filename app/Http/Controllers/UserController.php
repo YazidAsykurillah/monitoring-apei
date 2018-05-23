@@ -64,6 +64,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+
         if($request->role_id == 2){
             return $this->storeUserDpp($request);
         }elseif ($request->role_id == 3){
@@ -76,10 +77,14 @@ class UserController extends Controller
 
     //Block store user Member
     protected function storeUserMember(Request $request){
+
+        $default_password = \Config::get('monitoring_options.default_password.member');
+        
+
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = bcrypt("manchesterunited");
+        $user->password = bcrypt($default_password);
         $user->id_card = $request->id_card;
         $user->telephone = $request->telephone;
         $user->tempat_lahir = $request->tempat_lahir;
@@ -98,10 +103,12 @@ class UserController extends Controller
 
     //Block store user DPP
     protected function storeUserDpp(Request $request){
+        $default_password = \Config::get('monitoring_options.default_password.admin_dpp');
+
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = bcrypt("manchesterunited");
+        $user->password = bcrypt($default_password);
         $user->save();
         $user_id = $user->id;
         //attach role for this user
@@ -114,10 +121,12 @@ class UserController extends Controller
 
     //Block store user DPD
     protected function storeUserDpd(Request $request){
+        $default_password = \Config::get('monitoring_options.default_password.admin_dpd');
+
         $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = bcrypt("manchesterunited");
+        $user->password = bcrypt($default_password);
         $user->save();
         $user_id = $user->id;
         //attach role for this user
@@ -341,6 +350,7 @@ class UserController extends Controller
 
     public function postImport(Request $request)
     {
+        $default_password = \Config::get('monitoring_options.default_password.member');
         $imported_data = 0;
         if($request->hasFile('file') && $request->dpd_id!=""){
             $path = $request->file('file')->getRealPath();
@@ -353,7 +363,7 @@ class UserController extends Controller
                         $user = new User;
                         $user->name = $value->name;
                         $user->email = $value->email;
-                        $user->password = bcrypt("manchesterunited");
+                        $user->password = bcrypt($default_password);
                         $user->id_card = $value->id_card;
                         $user->telephone = $value->telephone;
                         $user->tempat_lahir = $value->tempat_lahir;

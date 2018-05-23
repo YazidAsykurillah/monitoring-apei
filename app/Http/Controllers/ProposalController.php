@@ -44,6 +44,9 @@ class ProposalController extends Controller
             elseif($request->status == 'all'){    //Show all proposals
                 return view('proposal.index');    
             }
+            elseif($request->status == 'rekapitulasi'){    //Show rekapitulasi
+                return view('proposal.rekapitulasi');    
+            }
             else{
                 return redirect('proposal')
                     ->with('errorMessage', "Proposal status is undefined");

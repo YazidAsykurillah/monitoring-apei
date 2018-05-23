@@ -13,62 +13,98 @@
 @section('breadcrumb')
   <ol class="breadcrumb">
     <li><a href="{{ URL::to('home') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li><a href="{{ URL::to('dpd') }}"><i class="fa fa-home"></i> DPD</a></li>
+    <li><a href="{{ URL::to('dpd') }}"><i class="fa fa-home"></i> PD</a></li>
     <li class="active"><i></i> {{ $dpd->code }}</li>
   </ol>
 @endsection
   
 @section('content')
   <div class="row">
-    <div class="col-md-4">
-      <!-- small box -->
-      <div class="small-box bg-aqua">
-        <div class="inner">
-          <h3>10</h3>
+    <div class="col-lg-12">
+      <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">Daftar Asesi {{ $dpd->name }}</h3>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="table-user">
+                <thead>
+                  <tr>
+                    <th style="width:5%;">#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>KTP / Passport</th>
+                    <th>No HP</th>
+                  </tr>
+                </thead>
+                <thead id="searchColumn">
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    
+                  </tr>
+                </thead>
+                
+                <tbody>
 
-          <p>Users</p>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+            </table>
+          </div>
+        </div><!-- /.box-body -->
+        <div class="box-footer clearfix">
+          
         </div>
-        <div class="icon">
-          <i class="ion ion-bag"></i>
-        </div>
-        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-md-4">
-      <!-- small box -->
-      <div class="small-box bg-green">
-        <div class="inner">
-          <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-          <p>Members</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-stats-bars"></i>
-        </div>
-        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-md-4">
-      <!-- small box -->
-      <div class="small-box bg-yellow">
-        <div class="inner">
-          <h3>44</h3>
-
-          <p>Certificates</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-person-add"></i>
-        </div>
-        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
+      </div><!-- /.box -->
+    </div>  
   </div>
 @endsection
 
 @section('additional_scripts')
  
+  <script type="text/javascript">
+    var tableUser =  $('#table-user').DataTable({
+      processing :true,
+      serverSide : true,
+      ajax : {
+        "url" : '{!! route('datatables.getMembersOfDpd') !!}',
+        data: function(d){
+          d.dpd_id = '{!! $dpd->id !!}';
+        }
+      },
+      columns :[
+        {data: 'rownum', name: 'rownum', searchable:false},
+        { data: 'name', name: 'name' },
+        { data: 'email', name: 'email' },
+        { data: 'id_card', name: 'id_card' },
+        { data: 'telephone', name: 'telephone' },
+      ]
+    });
+
+    // Setup - add a text input to each header cell
+    $('#searchColumn th').each(function() {
+      if ($(this).index() != 0) {
+        $(this).html('<input class="form-control" type="text" placeholder="Search" data-id="' + $(this).index() + '" />');
+      }
+          
+    });
+    //Block search input and select
+    $('#searchColumn input').keyup(function() {
+      tableUser.columns($(this).data('id')).search(this.value).draw();
+    });
+    //ENDBlock search input and select
+    
+  </script>
    
 @endsection

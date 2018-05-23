@@ -34,7 +34,7 @@
       @if(\Auth::user()->can('index-dpd'))
       <li {{{ (Request::is('dpd*') ? 'class=active' : '') }}}>
         <a href="{{ URL::to('dpd') }}">
-          <i class="fa fa-home"></i> <span>PD</span>
+          <i class="fa fa-home"></i> <span>DPD</span>
         </a>
       </li>
       @endif
@@ -43,26 +43,20 @@
       <li class="treeview {{{ (Request::is('proposal*') ? 'active':'') }}}">
         <a href="#">
           <i class="fa fa-newspaper-o"></i>
-          <span>Permohonan</span>
+          <span>Proposal</span>
         </a>
         <ul class="treeview-menu">
           <li class="{{{ (Request::is('proposal/?status=all') ? 'active':'') }}}">
             <a href="{{ URL::to('proposal/?status=all') }}">
-              <i class="fa fa-circle-o"></i> Daftar Permohonan
+              <i class="fa fa-circle-o"></i> Daftar Proposal
             </a>
           </li>
          
           <li class="{{{ (Request::is('proposal/?status=9') ? 'active':'') }}}">
             <a href="{{ url('proposal/?status=9') }}">
-              <i class="fa fa-circle-o"></i> Arsip Permohonan
+              <i class="fa fa-circle-o"></i> Arsip Proposal
             </a>
           </li>
-         
-          <!-- <li class="{{{ (Request::is('proposal/?status=rekapitulasi') ? 'active':'') }}}">
-            <a href="{{ url('proposal/?status=rekapitulasi') }}">
-              <i class="fa fa-circle-o"></i> Rekapitulasi
-            </a>
-          </li> -->        
         </ul>
       </li>
       @endif
@@ -70,7 +64,7 @@
       @if(\Auth::user()->can('index-member'))
       <li {{{ (Request::is('member*') ? 'class=active' : '') }}}>
         <a href="{{ URL::to('member') }}">
-          <i class="fa fa-user"></i> <span>Asesi / Peserta</span>
+          <i class="fa fa-user"></i> <span>Member</span>
         </a>
       </li>
       @endif
@@ -85,13 +79,13 @@
           @if(\Auth::user()->can('index-administrator-dpp'))
           <li class="{{{ (Request::is('user-dpp*') ? 'active':'') }}}">
             <a href="{{ URL::to('user-dpp') }}">
-              <i class="fa fa-circle-o"></i> Administrator PP
+              <i class="fa fa-circle-o"></i> Administrator DPP
             </a>
           </li>
           @endif
           <li class="{{{ (Request::is('user-dpd*') ? 'active':'') }}}">
             <a href="{{ url('user-dpd') }}">
-              <i class="fa fa-circle-o"></i> Administrator PD
+              <i class="fa fa-circle-o"></i> Administrator DPD
             </a>
           </li>
         </ul>
@@ -133,14 +127,6 @@
         </ul>
       </li>
       @endif
-
-      
-      <li {{{ (Request::is('template*') ? 'class=active' : '') }}}>
-        <a href="{{ URL::to('template') }}">
-          <i class="fa fa-download"></i> <span>Template</span>
-        </a>
-      </li>
-      
 
     </ul><!-- /.sidebar-menu -->
   </section>

@@ -15,6 +15,7 @@ use App\Role;
 use App\Permission;
 use App\Dpd;
 use App\Proposal;
+use App\Rekapitulasi;
 
 class DatatablesController extends Controller
 {
@@ -109,10 +110,13 @@ class DatatablesController extends Controller
         $dpds = Dpd::select([
             \DB::raw('@rownum  := @rownum  + 1 AS rownum'),
             'dpds.*',
-        ]);
+        ])->get();
 
         $data_dpds = Datatables::of($dpds)
             //->orderColumn('code', '-code $1')
+            ->editColumn('count_asesis', function($dpds){
+                return $dpds->count_asesis;
+            })
             ->addColumn('actions', function($dpds){
                     $actions_html ='<a href="'.url('dpd/'.$dpds->id.'').'" class="btn btn-primary btn-xs" title="Click to view the detail">';
                     $actions_html .=    '<i class="fa fa-external-link"></i>';
@@ -211,6 +215,53 @@ class DatatablesController extends Controller
         return $data_users->make(true);
     }
     //END Member Datatable
+
+    //Member of DPD
+    public function getMembersOfDpd(Request $request)
+    {
+
+        \DB::statement(\DB::raw('set @rownum=0'));
+        
+        $logged_in_user = \Auth::user()->roles->first()->id;
+        
+        $users = User::with(['roles', 'dpds'])
+            ->whereHas('roles', function($query) use($request){
+                $query->where('id','=',4);
+            })
+            ->whereHas('dpds', function($query) use($request){
+                $query->where('id','=',$request->dpd_id);
+            })
+            ->select([
+                \DB::raw('@rownum  := @rownum  + 1 AS rownum'),
+                'users.*'
+            ]);
+        
+
+        $data_users = Datatables::of($users)
+            ->addColumn('dpd_name', function($users){
+               return $users->dpds->first()->name;
+            })
+            ->addColumn('actions', function($users){
+                    $actions_html ='<a href="'.url('member/'.$users->id.'').'" class="btn btn-primary btn-xs" title="Click to view the detail">';
+                    $actions_html .=    '<i class="fa fa-external-link"></i>';
+                    $actions_html .='</a>&nbsp;';
+                    $actions_html .='<a href="'.url('member/'.$users->id.'/edit').'" class="btn btn-success btn-xs" title="Click to edit this user">';
+                    $actions_html .=    '<i class="fa fa-edit"></i>';
+                    $actions_html .='</a>&nbsp;';
+                    $actions_html .='<button type="button" class="btn btn-danger btn-xs btn-delete-user" data-id="'.$users->id.'" data-text="'.$users->name.'">';
+                    $actions_html .=    '<i class="fa fa-trash"></i>';
+                    $actions_html .='</button>';
+
+                    return $actions_html;
+            });
+
+        if ($keyword = $request->get('search')['value']) {
+            $data_users->filterColumn('rownum', 'whereRaw', '@rownum  + 1 like ?', ["%{$keyword}%"]);
+        }
+
+        return $data_users->make(true);
+    }
+    //END Member of DPD
 
 
     //Proposal
@@ -747,5 +798,41 @@ class DatatablesController extends Controller
         return $data_permissions->make(true);
     }
     //END Permission datatables
+
+
+
+    //Datatables ProposalRekapitulasi
+    //# proposal dengan status BERKAS LENGKAP
+    public function getProposalRekapitulasi(Request $request)
+    {
+
+        $user = \Auth::user();
+
+        \DB::statement(\DB::raw('set @rownum=0'));
+
+        $rekapitulasi = Rekapitulasi::select([
+                \DB::raw('@rownum  := @rownum  + 1 AS rownum'),
+                'rekapitulasi.*'
+            ]);
+        
+        $data_proposals = Datatables::of($rekapitulasi)
+        ->editColumn('Status_Pengajuan', function($rekapitulasi){
+            if($rekapitulasi->Status_Pengajuan == '1'){
+                return "Baru";
+            }elseif($rekapitulasi->Status_Pengajuan == '2'){
+                return "Penyetaraan";
+            }
+        })
+        ->addColumn('Tahun', function($rekapitulasi){
+            return substr($rekapitulasi->No_Register, -4);
+        });
+
+        if ($keyword = $request->get('search')['value']) {
+            $data_proposals->filterColumn('rownum', 'whereRaw', '@rownum  + 1 like ?', ["%{$keyword}%"]);
+        }
+
+        return $data_proposals->make(true);
+    }
+    //ENDDatatables ProposalRekapitulasi
     
 }

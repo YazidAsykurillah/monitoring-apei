@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
 @section('page_title')
-  Daftar DPD
+  Daftar PD
 @endsection
 
 @section('page_header')
   <h1>
-    DPD
-    <small>Daftar DPD</small>
+    PD
+    <small>Daftar PD</small>
   </h1>
 @endsection
 
 @section('breadcrumb')
   <ol class="breadcrumb">
     <li><a href="{{ URL::to('home') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li><a href="{{ URL::to('dpd') }}"><i class="fa fa-home"></i> DPD</a></li>
+    <li><a href="{{ URL::to('dpd') }}"><i class="fa fa-home"></i> PD</a></li>
     <li class="active"><i></i> Index</li>
   </ol>
 @endsection
@@ -24,7 +24,7 @@
     <div class="col-lg-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">DPD</h3>
+              <h3 class="box-title">PD</h3>
               <a href="{{ URL::to('dpd/create')}}" class="btn btn-primary pull-right" title="Create new dpd">
                 <i class="fa fa-plus"></i>&nbsp;Add New
               </a>
@@ -37,11 +37,13 @@
                       <th style="width:5%;">#</th>
                       <th>Code</th>
                       <th>Name</th>
+                      <th>Jumlah Asesi</th>
                       <th style="width:10%;text-align:center;">Actions</th>
                     </tr>
                   </thead>
                   <thead id="searchColumn">
                     <tr>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -54,6 +56,7 @@
                   </tbody>
                   <tfoot>
                     <tr>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -109,6 +112,7 @@
         {data: 'rownum', name: 'rownum', searchable:false},
         { data: 'code', name: 'code' },
         { data: 'name', name: 'name' },
+        { data: 'count_asesis', name: 'count_asesis' },
         { data: 'actions', name: 'actions', orderable:false, searchable:false, className:'dt-body-center' }
       ]
     });
@@ -124,7 +128,7 @@
 
     // Setup - add a text input to each header cell
     $('#searchColumn th').each(function() {
-      if ($(this).index() != 0 && $(this).index() != 3) {
+      if ($(this).index() != 0 && $(this).index() != 4) {
         $(this).html('<input class="form-control" type="text" placeholder="Search" data-id="' + $(this).index() + '" />');
       }
           
