@@ -716,8 +716,11 @@ class DatatablesController extends Controller
             ->editColumn('type', function($proposals){
                 return proposal_type_display($proposals->type);
             })
-             ->editColumn('status', function($proposals){
+            ->editColumn('status', function($proposals){
                 return proposal_status_display($proposals->status);
+            })
+            ->editColumn('status_djk', function($proposals){
+                return ucwords($proposals->status_djk);
             })
             ->addColumn('actions', function($proposals){
                     $actions_html ='<a href="'.url('proposal/'.$proposals->id.'').'" class="btn btn-primary btn-xs" title="Click to view the detail">';

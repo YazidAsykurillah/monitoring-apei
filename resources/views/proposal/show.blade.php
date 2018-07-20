@@ -68,9 +68,15 @@
                       <i class="fa fa-warning"></i>&nbsp;
                     @endif
                     {{ proposal_status_display($proposal->status)}}&nbsp;
-                    <a href="#" id="btn-change-status" data-id="{{ $proposal->id }}" data-text="{{ $proposal->code }}" class="btn btn-link">
-                      <i class="fa fa-cog"></i>&nbsp;Change Status
+                    <a href="#" id="btn-change-status" data-id="{{ $proposal->id }}" data-text="{{ $proposal->code }}" class="btn btn-link" title="Click to update status">
+                      <i class="fa fa-cog"></i>&nbsp;
                     </a>
+                    <br>
+                    @if($proposal->status == '3')
+                      <i>
+                        <text class="text-info">{{ ucwords($proposal->status_djk) }}</text>
+                      </i>
+                    @endif
                     
                   </td>
                 </tr>
@@ -79,6 +85,7 @@
                   <td style="width: 1%;">:</td>
                   <td>{!! nl2br($proposal->status_notes) !!}</td>
                 </tr>
+                
               </table>
             </div>
           </div><!-- /.box-body -->
@@ -135,7 +142,7 @@
             @foreach($proposal_file_check_lists as $check_list)
               <div class="form-group">
                 <div class="col-md-6">
-                    <label for="proposal_file_id">{{ $check_list->file }}</label>
+                    <label for="proposal_file_id">{{ ucwords(str_replace('_',' ',$check_list->file)) }}</label>
                 </div>
                 <div class="col-md-3">
                   <input type="checkbox" name="proposal_file_id[]" class="proposal_file_checkboxes" value="{{ $check_list->id}}" {{ $check_list->status == TRUE ? 'checked':''}} /> 
@@ -180,6 +187,12 @@
               {{ Form::select('status',$status_opts , $proposal->status, ['class'=>'form-control', 'id'=>'status']) }}
             </div>
           </div>
+          <div class="form-group">
+            {!! Form::label('status_djk', 'Status DJK', ['class'=>'col-sm-2 control-label']) !!}
+            <div class="col-sm-10">
+              {{ Form::select('status_djk',$status_djk_options , $proposal->status_djk, ['class'=>'form-control', 'id'=>'status_djk']) }}
+            </div>
+          </div>
           <div class="form-group{{ $errors->has('status_notes') ? ' has-error' : '' }}">
             {!! Form::label('status_notes', 'Status Notes', ['class'=>'col-sm-2 control-label']) !!}
             <div class="col-sm-10">
@@ -218,6 +231,7 @@
   });
 
   $('#status').on('change', function(){
+    
     $('#status_notes').val('');
   });
 

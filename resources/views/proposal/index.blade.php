@@ -48,11 +48,13 @@
                       <th style="width:10%;">Created Date</th>
                       <th>Status</th>
                       <th>Status Notes</th>
+                      <th>Status DJK</th>
                       <th style="width:10%;text-align:center;">Actions</th>
                     </tr>
                   </thead>
                   <thead id="searchColumn">
                     <tr>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -72,6 +74,7 @@
                   </tbody>
                   <tfoot>
                     <tr>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>
@@ -144,6 +147,7 @@
         { data: 'created_at', name: 'created_at' },
         { data: 'status', name: 'status' },
         { data: 'status_notes', name: 'status_notes' },
+        { data: 'status_djk', name: 'status_djk' },
         { data: 'actions', name: 'actions', orderable:false, searchable:false, className:'dt-body-center' }
       ],
       "order": [[ 7, "desc" ]]
@@ -160,7 +164,7 @@
 
     // Setup text inputs and select options to each header cell
     $('#searchColumn th').each(function() {
-      if ($(this).index() != 0 && $(this).index() != 10) {
+      if ($(this).index() != 0 && $(this).index() != 11) {
         $(this).html('<input class="form-control" type="text" placeholder="Search" data-id="' + $(this).index() + '" />');
       }
       if($(this).index() == 8){

@@ -133,6 +133,19 @@ class ProposalController extends Controller
             '10'=>'SELESAI'
         ];
 
+        //status djk options
+        $status_djk_options = [
+          ''=>'--Select--',
+          'proses'=>'Proses',
+          'diterima'=>'Diterima',
+          'ditolak'=>'Ditolak',
+          'draft'=>'Draft',
+          'agenda'=>'Agenda',
+          'input_hasil'=>'Input Hasil',
+          'selesai'=>'Selesai',
+
+        ];
+
         $proposal_files = \DB::table('proposal_files')->where('proposal_id', '=', $id)->get();
         if(count($proposal_files)){
             $proposal_file_check_lists = $proposal_files;
@@ -174,6 +187,7 @@ class ProposalController extends Controller
         return view('proposal.show')
             ->with('status_opts', $status_opts)
             ->with('proposal_file_check_lists', $proposal_file_check_lists)
+            ->with('status_djk_options', $status_djk_options)
             ->with('proposal', $proposal);
     }
 
@@ -232,6 +246,7 @@ class ProposalController extends Controller
         $old_status = $proposal->status;
 
         $proposal->status = $request->status;
+        $proposal->status_djk = $request->status_djk;
         $proposal->status_notes = $request->status_notes;
           //if request status is 2 = Berkas tidak lengkap, delete proposal file related to this proposal
           if($request->status == 2){
